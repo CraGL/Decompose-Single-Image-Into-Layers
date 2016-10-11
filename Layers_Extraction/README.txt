@@ -1,6 +1,12 @@
-Input: Source Image; Color palettes ordering json file(User Specified); Simplified ConvexHull Vertices(color palettes) json file; Regularization Term Weights json file.
+Input: 
+	Source Image; 
+	Color palettes ordering json file(User Specified); 
+	Simplified ConvexHull Vertices(color palettes) json file; 
+	Regularization Term Weights json file.
 
-Output: Translucent layers; Barycentric Coordintate Weights.
+Output: 
+	Translucent layers; 
+	Barycentric Coordintate Weights.
 
 
 Our Main method:
