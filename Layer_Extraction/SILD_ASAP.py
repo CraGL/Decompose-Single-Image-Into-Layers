@@ -27,7 +27,7 @@ def Get_ASAP_alphas(img_label,tetra_prime,weights):
 
     ### adjust the weights:
     if 'w_polynomial' in weights:
-        weights['w_polynomial'] *= 50000.0 
+        # weights['w_polynomial'] *= 50000.0 
         weights['w_polynomial'] /= img_shape[2]
 
     if 'w_opaque' in weights:
@@ -230,8 +230,12 @@ def covnert_from_barycentric_weights_to_alphas(weights,order,epsilon=0.0/512):
 if __name__ =='__main__':
 
     import sys
+    
     filename=sys.argv[1]
-    resize_flag=sys.argv[2]
+    
+    resize_flag = None
+    if len( sys.argv > 2 )
+        resize_flag=sys.argv[2]
 
     # filename="test_fourcolors.json"
 
@@ -243,12 +247,11 @@ if __name__ =='__main__':
     input_image_name=json_data["input_image_name"]
     input_vertices_file_name=json_data["input_vertices_file_name"]
     input_vertices_order_file_name=json_data["input_vertices_order_file_name"]
-    output_middle_name=json_data["output_middle_name"]
+    output_prefix=json_data["output_prefix"]
     weights=json_data["weights"]
     pprint(weights)
 
-    output_prefix=os.path.splitext(input_vertices_file_name)[0]+"-ASAP-"+output_middle_name+"-poly"+str(weights["w_polynomial"])+"-opaque"+str(weights["w_opaque"])
-
+    # output_prefix=os.path.splitext(input_vertices_file_name)[0]+"-ASAP-"+output_prefix+"-poly"+str(weights["w_polynomial"])+"-opaque"+str(weights["w_opaque"])
 
     images=Image.open(input_image_name).convert('RGB')
     if resize_flag=='resize_small':
@@ -320,10 +323,9 @@ if __name__ =='__main__':
     with open(output_all_weights_filename,'wb') as myfile:
         json.dump({'weights': origin_order_barycentric_weights.tolist()}, myfile)
 
-    import cv2
     for i in range(origin_order_barycentric_weights.shape[-1]):
         output_all_weights_map_filename=output_prefix+"-layer_optimization_all_weights_map-%02d.png" % i
-        cv2.imwrite(output_all_weights_map_filename,(origin_order_barycentric_weights[:,:,i]*255).round().clip(0,255).astype(uint8))
+        Image.fromarray((origin_order_barycentric_weights[:,:,i]*255).round().clip(0,255).astype(uint8)).save(output_all_weights_map_filename)
 
 
 

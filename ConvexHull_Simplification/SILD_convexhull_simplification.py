@@ -2,9 +2,7 @@
 #### and then remove many unrelated codes. 
 
 
-from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
-from matplotlib import pyplot as plt
 from scipy.spatial import ConvexHull
 from scipy.spatial import Delaunay
 from scipy.optimize import *
@@ -19,6 +17,8 @@ import sys
 #### also using trimesh.py interface from yotam gingold
 
 def visualize_hull(hull,groundtruth_hull=None):
+    from matplotlib import pyplot as plt
+    
     fig = plt.figure(figsize=(8,8))
     ax = fig.add_subplot(1,1,1, projection='3d')
     vertex=hull.points[hull.vertices]

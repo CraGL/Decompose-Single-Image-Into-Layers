@@ -1,3 +1,7 @@
+'''
+From: https://github.com/yig/trimesh/
+'''
+
 from numpy import *
 
 def mag2( vec ):

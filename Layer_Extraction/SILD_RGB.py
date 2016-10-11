@@ -390,6 +390,9 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
     if save_every is None:
         save_every = 100.
     
+    if solve_smaller_factor is None:
+        solve_smaller_factor = 2
+    
     if too_small is None:
         too_small = 5
     
@@ -427,7 +430,7 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
     if weightspath is not None:
         weights = json.load( open( weightspath ) )
     else:
-        weights = { 'w_polynomial': 3.0, 'w_opaque': 500., 'w_spatial_dynamic': 5000. }
+        weights = { 'w_polynomial': 375, 'w_opaque': 1., 'w_spatial_dynamic': 100. }
         # weights = { 'w_polynomial': 1., 'w_opaque': 100. }
         # weights = { 'w_opaque': 100. }
         # weights = { 'w_spatial_static': 100. }
@@ -438,7 +441,7 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
     num_layers=len(colors)-1
     ### adjust the weights:
     if 'w_polynomial' in weights:
-        weights['w_polynomial'] *= 50000.0 #### old one is 255*255
+        # weights['w_polynomial'] *= 50000.0 #### old one is 255*255
         weights['w_polynomial'] /= arr.shape[2]
     
     if 'w_opaque' in weights:
@@ -452,7 +455,7 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
      
 
     
-    if solve_smaller_factor is not None:
+    if solve_smaller_factor != 1:
         assert solve_smaller_factor > 1
         
         def optimize_smaller( solve_smaller_factor, large_arr, large_Y0, large_img_spatial_static_target ):
@@ -544,10 +547,9 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
     with open(output_all_weights_filename,'wb') as myfile:
         json.dump({'weights': origin_order_barycentric_weights.tolist()}, myfile)
     
-    import cv2
     for i in range(origin_order_barycentric_weights.shape[-1]):
         output_all_weights_map_filename=outprefix+"-layer_optimization_all_weights_map-%02d.png" % i
-        cv2.imwrite(output_all_weights_map_filename,(origin_order_barycentric_weights[:,:,i]*255).round().clip(0,255).astype(uint8))
+        Image.fromarray((origin_order_barycentric_weights[:,:,i]*255).round().clip(0,255).astype(uint8)).save(output_all_weights_map_filename)
     return Y
     
 # def save_alpha_info(Y,img_shape,outprefix):
