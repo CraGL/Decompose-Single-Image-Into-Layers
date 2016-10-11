@@ -1,0 +1,10 @@
+{
+	"input_image_name": "apple.png",
+	"input_vertices_file_name": "apple-final_simplified_hull_clip-06.js",
+    "input_vertices_order_file_name": "apple-final_simplified_hull_clip-06-color_order1.js",
+    "output_middle_name": "RGB_lap_adjusted_weights-color_order1",
+    "weights":     {
+                     "w_polynomial": 3.0,
+                     "w_opaque": 400.0
+                   }
+}
