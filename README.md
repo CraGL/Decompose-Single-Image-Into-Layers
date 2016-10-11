@@ -43,27 +43,30 @@ We provide two choices for this layer extraction step:
 
 Convex Hull Simplification:
 
-    cd results
+    cd examples
     python ../ConvexHull_Simplification/SILD_convexhull_simplification.py apple
 
 Layer extraction (RGB):
 
-    cd results
+    cd examples
     python ../Layer_Extraction/SILD_RGB.py apple.png apple-06-vertex_order.js apple-final_simplified_hull_clip-06.js apple-06-layers-RGB --weights weights.js
 
 Layer extraction (RGBA): (Note that `apple` has an opaque background, so it is not a good example for RGBA layer extraction.)
 
-    cd results
+    cd examples
     python ../Layer_Extraction/SILD_RGBA.py apple.png apple-06-vertex_order.js apple-final_simplified_hull_clip-06.js apple-06-layers-RGBA --weights weights.js
 
 Layer extraction (ASAP) (all arguments are in the JSON parameter file):
 
-    cd results
+    cd examples
     python ../Layer_Extraction/SILD_ASAP.py apple-06-ASAP.js
+
+(The `apple.png` example is copyright [Adelle Chudleigh](http://gothicwolfcorpse.deviantart.com/).)
 
 ## Dependencies
 * NumPy
 * SciPy
-* cvxopt (as an interface to the [GLPK](https://www.gnu.org/software/glpk/) linear programming solver)
+* Cython
 * [GLPK](https://www.gnu.org/software/glpk/) (`brew install glpk`)
-* PIL or Pillow (Python Image Library): `pip install Pillow`
+* cvxopt, built with the [GLPK](https://www.gnu.org/software/glpk/) linear programming solver interface (`CVXOPT_BUILD_GLPK=1 pip install cvxopt`)
+* PIL or Pillow (Python Image Library) (`pip install Pillow`)

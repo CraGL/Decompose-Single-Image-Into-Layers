@@ -234,7 +234,7 @@ if __name__ =='__main__':
     filename=sys.argv[1]
     
     resize_flag = None
-    if len( sys.argv > 2 )
+    if len( sys.argv ) > 2:
         resize_flag=sys.argv[2]
 
     # filename="test_fourcolors.json"
