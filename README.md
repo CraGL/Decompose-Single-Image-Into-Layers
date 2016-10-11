@@ -61,7 +61,10 @@ Layer extraction (ASAP) (all arguments are in the JSON parameter file):
     cd examples
     python ../Layer_Extraction/SILD_ASAP.py apple-06-ASAP.js
 
-(The `apple.png` example is copyright [Adelle Chudleigh](http://gothicwolfcorpse.deviantart.com/).)
+You can test if your installation is working by comparing your output to the `apple-output` directory.
+You can find the output for other examples in the [supplemental materials](http://cs.gmu.edu/~ygingold/singleimage/) of our paper.
+
+The `apple.png` image is copyright [Adelle Chudleigh](http://gothicwolfcorpse.deviantart.com/).
 
 ## Dependencies
 * NumPy
