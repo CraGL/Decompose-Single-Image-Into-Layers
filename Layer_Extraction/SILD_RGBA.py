@@ -637,7 +637,7 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
     with open(output_all_weights_filename,'wb') as myfile:
         json.dump({'weights': origin_order_barycentric_weights_expand.tolist()}, myfile)
     
-    expand_order=np.ones(len(order)+1)
+    expand_order=ones(len(order)+1)
     expand_order[0]=0
     expand_order[1:]=order+1
     for i in range(origin_order_barycentric_weights_expand.shape[-1]):
