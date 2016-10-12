@@ -36,7 +36,7 @@ Users can perform global recoloring in [our web GUI](http://yig.github.io/image-
 
 We provide two choices for this layer extraction step:
 
-* Our main global optimization-based approach, including RGB and RGBA versions. The RGB optimization assumes that the first layer is opaque, which means its color is the background color. The RGBA version is appropriate when there is no obvious background color, such as a photograph.
+* Our main global optimization-based approach, including RGB and RGBA versions. The RGB optimization assumes that the first layer is opaque, which means its color is the background color. The RGBA version is appropriate when input image is RGBA translucent image or there is no obvious background color in input image, such as a photograph.
 * Our As-Sparse-As-Possible (ASAP) approach, which is independent per-pixel and therefore much faster but generates noisier results.
 
 ## Example usage
