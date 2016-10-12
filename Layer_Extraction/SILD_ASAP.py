@@ -325,7 +325,7 @@ if __name__ =='__main__':
 
     for i in range(origin_order_barycentric_weights.shape[-1]):
         output_all_weights_map_filename=output_prefix+"-layer_optimization_all_weights_map-%02d.png" % i
-        Image.fromarray((origin_order_barycentric_weights[:,:,i]*255).round().clip(0,255).astype(uint8)).save(output_all_weights_map_filename)
+        Image.fromarray((origin_order_barycentric_weights[:,:,input_color_order[i]]*255).round().clip(0,255).astype(uint8)).save(output_all_weights_map_filename)
 
 
 

@@ -549,7 +549,7 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
     
     for i in range(origin_order_barycentric_weights.shape[-1]):
         output_all_weights_map_filename=outprefix+"-layer_optimization_all_weights_map-%02d.png" % i
-        Image.fromarray((origin_order_barycentric_weights[:,:,i]*255).round().clip(0,255).astype(uint8)).save(output_all_weights_map_filename)
+        Image.fromarray((origin_order_barycentric_weights[:,:,order[i]]*255).round().clip(0,255).astype(uint8)).save(output_all_weights_map_filename)
     return Y
     
 # def save_alpha_info(Y,img_shape,outprefix):

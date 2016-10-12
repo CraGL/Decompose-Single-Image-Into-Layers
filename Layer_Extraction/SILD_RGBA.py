@@ -637,9 +637,12 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
     with open(output_all_weights_filename,'wb') as myfile:
         json.dump({'weights': origin_order_barycentric_weights_expand.tolist()}, myfile)
     
+    expand_order=np.ones(len(order)+1)
+    expand_order[0]=0
+    expand_order[1:]=order+1
     for i in range(origin_order_barycentric_weights_expand.shape[-1]):
         output_all_weights_map_filename=outprefix+"-layer_optimization_all_weights_map-%02d.png" % i
-        Image.fromarray((origin_order_barycentric_weights_expand[:,:,i]*255).round().clip(0,255).astype(uint8)).save(output_all_weights_map_filename)
+        Image.fromarray((origin_order_barycentric_weights_expand[:,:,expand_order[i]]*255).round().clip(0,255).astype(uint8)).save(output_all_weights_map_filename)
     return Y
     
 
