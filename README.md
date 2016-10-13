@@ -54,7 +54,7 @@ Layer extraction (RGB):
 Layer extraction (RGBA): (Note that `apple` has an opaque background, so it is not a good example for RGBA layer extraction.)
 
     cd examples
-    python ../Layer_Extraction/SILD_RGBA.py apple.png apple-06-vertex_order.js apple-final_simplified_hull_clip-06.js apple-06-layers-RGBA --weights weights.js
+    python ../Layer_Extraction/SILD_RGBA.py moth.png moth-06-vertex_order.js moth-final_simplified_hull_clip-06.js moth-06-layers-RGBA --weights weights.js
 
 Layer extraction (ASAP) (all arguments are in the JSON parameter file):
 
@@ -65,6 +65,7 @@ You can test if your installation is working by comparing your output to the `ap
 You can find the output for other examples in the [supplemental materials](http://cs.gmu.edu/~ygingold/singleimage/) of our paper.
 
 The `apple.png` image is copyright [Adelle Chudleigh](http://gothicwolfcorpse.deviantart.com/).
+The `moth.png` image is copyright [Michelle Lee](http://cargocollective.com/michellelee/Illustration).
 
 ## Dependencies
 * NumPy
