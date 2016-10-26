@@ -62,7 +62,7 @@ Layer extraction (ASAP) (all arguments are in the JSON parameter file):
     python ../Layer_Extraction/SILD_ASAP.py apple-06-ASAP.js
 
 You can test if your installation is working by comparing your output to the `apple-output` directory.
-You can find the output for other examples in the [supplemental materials](http://cs.gmu.edu/~ygingold/singleimage/) of our paper.
+You can find the output for other examples in the [supplemental materials](http://cs.gmu.edu/~ygingold/singleimage/) of our paper. If you want the optimization to be faster, you can increase gtol and ftol values in scipy.optimize.minimize(). Our current implementation in paper is using default values of the function. 
 
 The `apple.png` image is copyright [Adelle Chudleigh](http://gothicwolfcorpse.deviantart.com/).
 The `moth.png` image is copyright [Michelle Lee](http://cargocollective.com/michellelee/Illustration).
