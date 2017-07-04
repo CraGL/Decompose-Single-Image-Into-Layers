@@ -199,6 +199,8 @@ def remove_one_edge_by_finding_smallest_adding_volume_with_test_conditions(mesh,
         
         c=np.asfarray(c)
         cvxopt.solvers.options['show_progress'] = False
+        cvxopt.solvers.options['glpk'] = dict(msg_lev='GLP_MSG_OFF')
+
         res = cvxopt.solvers.lp( cvxopt.matrix(c), cvxopt.matrix(A), cvxopt.matrix(b), solver='glpk' )
 
         if res['status']=='optimal':
@@ -222,12 +224,12 @@ def remove_one_edge_by_finding_smallest_adding_volume_with_test_conditions(mesh,
             temp_list2.append(newpoint)
             count+=1
            
-        else:
-            print 'cvxopt.solvers.lp is not optimal ', res['status'], np.asfarray( res['x'] ).squeeze()
-            if res['status']!='unknown': ### means solver failed
-                ##### check our test to see if the solver fails normally
-                if edge_normal_test(vertices,faces,face_index,vertex1,vertex2)==1: ### means all normal dot value are positive
-                    print '!!!edge_normal_neighbor_normal_dotvalue all positive, but solver fails'
+        # else:
+        #     print 'cvxopt.solvers.lp is not optimal ', res['status'], np.asfarray( res['x'] ).squeeze()
+        #     if res['status']!='unknown': ### means solver failed
+        #         ##### check our test to see if the solver fails normally
+        #         if edge_normal_test(vertices,faces,face_index,vertex1,vertex2)==1: ### means all normal dot value are positive
+        #             print '!!!edge_normal_neighbor_normal_dotvalue all positive, but solver fails'
               
                 
 
@@ -237,10 +239,10 @@ def remove_one_edge_by_finding_smallest_adding_volume_with_test_conditions(mesh,
             hull=ConvexHull(mesh.vs)
         else:
             min_tuple=min(temp_list1,key=lambda x: x[1])
-            print min_tuple
+            # print min_tuple
             final_index=min_tuple[0]
             final_point=temp_list2[final_index]
-            print 'final_point ', final_point
+            # print 'final_point ', final_point
             new_total_points=mesh.vs
             new_total_points.append(final_point)
 
@@ -253,10 +255,10 @@ def remove_one_edge_by_finding_smallest_adding_volume_with_test_conditions(mesh,
             print 'all fails'
         else:
             min_tuple=min(temp_list1,key=lambda x: x[1])
-            print min_tuple
+            # print min_tuple
             final_index=min_tuple[0]
             final_point=temp_list2[final_index]
-            print 'final_point ', final_point
+            # print 'final_point ', final_point
             
             v1_ind=min_tuple[2]
             v2_ind=min_tuple[3]
@@ -335,7 +337,7 @@ if __name__=="__main__":
 
     for i in range(N):
 
-        print 'loop:', i
+        # print 'loop:', i
         
         old_num=len(mesh.vs)
         mesh=TriMesh.FromOBJ_FileName(output_rawhull_obj_file)
@@ -343,7 +345,7 @@ if __name__=="__main__":
         newhull=ConvexHull(mesh.vs)
         write_convexhull_into_obj_file(newhull, output_rawhull_obj_file)
 
-        print 'current vertices number:', len(mesh.vs)
+        # print 'current vertices number:', len(mesh.vs)
 
         if len(newhull.vertices) <= 10:
             import json, os
@@ -369,7 +371,7 @@ if __name__=="__main__":
     newhull=ConvexHull(mesh.vs)
     # visualize_hull(newhull)
     write_convexhull_into_obj_file(newhull, output_rawhull_obj_file) 
-    print newhull.points[newhull.vertices]
+    # print newhull.points[newhull.vertices]
 
 
     # import json
