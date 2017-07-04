@@ -163,14 +163,14 @@ def gen_energy_and_gradient( img, layer_colors, weights, img_spatial_static_targ
         Yspatial_static_target = img_spatial_static_target.ravel()
     
     if 'w_spatial_dynamic' in weights:
-        print 'Preparing a Laplacian matrix for E_spatial_dynamic...'
+        # print 'Preparing a Laplacian matrix for E_spatial_dynamic...'
         import fast_energy_laplacian
         import scipy.sparse
-        print '    Generating L...'
+        # print '    Generating L...'
         LTL = fast_energy_laplacian.gen_grid_laplacian( img.shape[0], img.shape[1] )
-        print '    Computing L.T*L...'
+        # print '    Computing L.T*L...'
         # LTL = LTL.T * LTL
-        print '    Replicating L.T*L for all layers...'
+        # print '    Replicating L.T*L for all layers...'
         ## Now repeat LTL #layers times.
         ## Because the layer values are the innermost dimension,
         ## every entry (i,j, val) in LTL should be repeated
@@ -210,7 +210,7 @@ def gen_energy_and_gradient( img, layer_colors, weights, img_spatial_static_targ
         vals = ( repeat( asarray( LTL.data ).reshape( LTL.nnz, 1 ), num_layers, 1 ) ).ravel()
         
         LTL = scipy.sparse.coo_matrix( ( vals, ( rows, cols ) ), shape = ( shape[0]*num_layers, shape[1]*num_layers ) ).tocsr()
-        print '...Finished.'
+        # print '...Finished.'
     
     if scratches is None:
         scratches = {}
@@ -333,7 +333,13 @@ def optimize( arr, colors, Y0, weights, img_spatial_static_target = None, scratc
         ## Max difference led to stopping with visible artifacts.
         ## Total absolute difference terminated on the very iteration that L-BFGS-B did
         ## anyways.
-        opt_result = scipy.optimize.minimize( e, Y0, jac = g, bounds = bounds, callback = callback )
+
+        opt_result = scipy.optimize.minimize( e, Y0, jac = g, bounds = bounds, callback = callback
+         # ,method='L-BFGS-B'
+         # ,options={'ftol': 1e-4, 'gtol': 1e-4}
+         )
+
+        
     
     except KeyboardInterrupt:
         ## If the user 
@@ -378,12 +384,12 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
     arr_backup=arr.copy()
     arr = arr/255.0
     order=asarray(json.load(open(orderpath)))
-    print order
+    # print order
     colors = asfarray(json.load(open(colorpath))['vs'])
     colors_backup=colors.copy()
-    print colors
+    # print colors
     colors=colors[order,:]/255.0
-    print colors*255.0
+    # print colors*255.0
     
     assert solve_smaller_factor is None or int( solve_smaller_factor ) == solve_smaller_factor
     
