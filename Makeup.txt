@@ -1,0 +1,40 @@
+For those who failed to install cvxopt with glpk on their mac:
+
+######################################################################################################
+
+1. First install glpk 4.57 from source.  according to: https://hichenwang.blogspot.com/2011/08/fw-installing-glpk-on-mac.html
+glpk 4.57 can be downloaded from https://ftp.gnu.org/gnu/glpk/
+
+
+cd ~/Downloads/glpk-4.57
+
+./configure --prefix=/usr/local 
+
+make 
+
+make install 
+
+
+
+
+2. Then install cvxopt-1.1.8 from source. 
+cvxopt-1.1.8 can be downloaded from https://www.versioneye.com/python/cvxopt/1.1.8
+
+cd ~/Downloads/cvxopt-1.1.8
+
+modify three variables in setup.py files:
+# Set to 1 if you are installing the glpk module.
+BUILD_GLPK = 1
+# Directory containing libglpk (used only when BUILD_GLPK = 1).
+GLPK_LIB_DIR = '/usr/local/lib'
+# Directory containing glpk.h (used only when BUILD_GLPK = 1).
+GLPK_INC_DIR = '/usr/local/include'
+
+python setup.py install
+
+
+######################################################################################################
+I test it on my macOS 10.11.6 
+I hope this will be helpful. I tried some other versions' install, all of them failed in my mac. Only this one can work. The version of glpk and cvxopt seem to be important. 
+
+

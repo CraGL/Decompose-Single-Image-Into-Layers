@@ -45,7 +45,7 @@ def Get_ASAP_alphas(img_label,tetra_prime,weights):
     hull=ConvexHull(tetra_prime)
     test_inside=Delaunay(tetra_prime)
     label=test_inside.find_simplex(img_label,tol=1e-8)
-    print len(label[label==-1])
+    # print len(label[label==-1])
 
     ### modify img_label[] to make all points are inside the simplified convexhull
     for i in range(img_label.shape[0]):
@@ -64,7 +64,7 @@ def Get_ASAP_alphas(img_label,tetra_prime,weights):
     ### assert
     test_inside=Delaunay(tetra_prime)
     label=test_inside.find_simplex(img_label,tol=1e-8)
-    print len(label[label==-1])
+    # print len(label[label==-1])
     assert(len(label[label==-1])==0)
 
 
@@ -80,16 +80,16 @@ def Get_ASAP_alphas(img_label,tetra_prime,weights):
         colors2xy[tuple(element)].append(index)
 
     unique_colors=np.array(colors2xy.keys())
-    print len(img_label)
+    # print len(img_label)
     img_label=unique_colors.copy()
-    print len(img_label)
+    # print len(img_label)
     vertices_list=tetra_prime
 
 
 
     tetra_pixel_dict={}
     for face_vertex_ind in hull.simplices:
-        print face_vertex_ind
+        # print face_vertex_ind
         if (face_vertex_ind!=0).all():
             i,j,k=face_vertex_ind
             tetra_pixel_dict.setdefault(tuple((i,j,k)),[])
@@ -98,7 +98,7 @@ def Get_ASAP_alphas(img_label,tetra_prime,weights):
 
     for face_vertex_ind in hull.simplices:
         if (face_vertex_ind!=0).all():
-            print face_vertex_ind
+            # print face_vertex_ind
             i,j,k=face_vertex_ind
             tetra=np.array([vertices_list[0],vertices_list[i],vertices_list[j],vertices_list[k]])
             test_Del=Delaunay(tetra)
@@ -109,7 +109,7 @@ def Get_ASAP_alphas(img_label,tetra_prime,weights):
                 tetra_pixel_dict[tuple((i,j,k))]+=chosen_index
                 index_list=np.array(list(set(index_list)-set(chosen_index)))
 
-    print index_list
+    # print index_list
     assert(len(index_list)==0)
  
             # temp_index_list=list(index_list)
@@ -123,23 +123,23 @@ def Get_ASAP_alphas(img_label,tetra_prime,weights):
     pixel_num=0
     for key in tetra_pixel_dict:
         pixel_num+=len(tetra_pixel_dict[key])
-    print pixel_num
+    # print pixel_num
     assert(pixel_num==img_label.shape[0])
 
 
 
     ### input is like (0,1,2,3,4) then shortest_path_order is (1,2,3,4), 0th is background color, usually is white
     shortest_path_order=tuple(np.arange(len(tetra_prime))[1:])
-    print shortest_path_order
+    # print shortest_path_order
 
     alpha_list=np.zeros((img_label.shape[0],len(shortest_path_order)))
     color_list=vertices_list[np.asarray(list(shortest_path_order))]
 
     for vertice_tuple in tetra_pixel_dict:
-        print vertice_tuple
+        # print vertice_tuple
         vertice_index_inglobalorder=np.asarray(shortest_path_order)[np.asarray(sorted(list(shortest_path_order).index(s) for s in vertice_tuple))]
         vertice_index_inglobalorder_tuple=tuple(list(vertice_index_inglobalorder))
-        print vertice_index_inglobalorder_tuple
+        # print vertice_index_inglobalorder_tuple
         
         colors=np.array([vertices_list[0],
                          vertices_list[vertice_index_inglobalorder_tuple[0]],
@@ -157,7 +157,7 @@ def Get_ASAP_alphas(img_label,tetra_prime,weights):
             alpha_list[pixel_index[:,None],np.array([np.asarray(sorted(list(shortest_path_order).index(s) for s in vertice_tuple))])]=sub_alpha_list
 
 
-    print alpha_list.shape
+    # print alpha_list.shape
 
     #### orignal shape alpha list
     total_alpha_list=np.zeros((len(img_label_backup),len(shortest_path_order)))
@@ -265,15 +265,15 @@ if __name__ =='__main__':
     img_label=img_label/255.0
 
     input_color_order=np.asarray(json.load(open(input_vertices_order_file_name)))
-    print input_color_order 
+    # print input_color_order 
 
     tetra_prime=np.asfarray(json.load(open(input_vertices_file_name))['vs'])
     tetra_prime=tetra_prime/255.0
     tetra_prime_backup=tetra_prime.copy()
-    print tetra_prime
+    # print tetra_prime
     ##### reorder the vertices(colors).
     tetra_prime=tetra_prime[input_color_order,:]
-    print tetra_prime
+    # print tetra_prime
 
 
     total_alpha_list=Get_ASAP_alphas(img_label,tetra_prime,weights)
