@@ -1,7 +1,7 @@
 #####directly copy from SILD_convexhull_simplification-minimize_adding_volume_or_normalized_adding_volume.ipynb 2016.01.11
 #### and then remove many unrelated codes. 
 
-from __future__ import print_function
+from __future__ import print_function, division
 
 import numpy as np
 from scipy.spatial import ConvexHull

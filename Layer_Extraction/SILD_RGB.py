@@ -1,5 +1,12 @@
+from __future__ import print_function, division
+
 from numpy import *
-from itertools import izip as zip
+try: from itertools import izip as zip
+except ImportError: pass ## Python3
+
+try: from time import process_time as clock
+## Python 2 compatibility
+except ImportError: from time import clock
 
 ## Normally it is bad practice to put a mutable value as the default parameter,
 ## because it is shared across all function calls, so its changed state will persist.
@@ -296,8 +303,7 @@ def optimize( arr, colors, Y0, weights, img_spatial_static_target = None, scratc
     '''
     
     import scipy.optimize
-    import time
-    start = time.clock()
+    start = clock()
 
     Y0 = Y0.ravel()
     
@@ -320,7 +326,7 @@ def optimize( arr, colors, Y0, weights, img_spatial_static_target = None, scratc
         if saver is not None: saver( xk )
     
     # print 'Optimizing...'
-    # start = time.clock()
+    # start = clock()
     
     try:
         ## WOW! TNC does a really bad job on our problem.
@@ -343,7 +349,7 @@ def optimize( arr, colors, Y0, weights, img_spatial_static_target = None, scratc
     
     except KeyboardInterrupt:
         ## If the user 
-        print 'KeyboardInterrupt after %d iterations!' % Ysofar[0]
+        print( 'KeyboardInterrupt after %d iterations!' % Ysofar[0] )
         Y = Ysofar[1]
         ## Y will be None if we didn't make it through 1 iteration before a KeyboardInterrupt.
         if Y is None:
@@ -353,11 +359,11 @@ def optimize( arr, colors, Y0, weights, img_spatial_static_target = None, scratc
         # print opt_result
         Y = opt_result.x
     
-    # duration = time.clock() - start
+    # duration = clock() - start
     # print '...Finished optimizing in %.3f seconds.' % duration
     
-    end = time.clock()
-    print 'Optimize an image of size ', Y.shape, ' took ', (end-start), ' seconds.'
+    end = clock()
+    print( 'Optimize an image of size ', Y.shape, ' took ', (end-start), ' seconds.' )
 
     Y = Y.reshape( arr.shape[0], arr.shape[1], len( colors )-1 )
     return Y
@@ -378,7 +384,6 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
     
     import json, os
     from PIL import Image
-    import time
     
     arr = asfarray( Image.open( imgpath ).convert( 'RGB' ) )
     arr_backup=arr.copy()
@@ -410,20 +415,20 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
     last_save = [ None, None, None ]
     def reset_saver( arr_shape ):
         last_save[0] = 0
-        last_save[1] = time.clock()
+        last_save[1] = clock()
         last_save[2] = arr_shape
     def saver( xk ):
         arr_shape = last_save[2]
         
         last_save[0] += 1
-        now = time.clock()
+        now = clock()
         ## Save every 10 seconds!
         if now - last_save[1] > kSaveEverySeconds:
-            print 'Iteration', last_save[0]
+            print( 'Iteration', last_save[0] )
             save_results( xk, colors, arr_shape, outprefix )
             ## Get the time again instead of using 'now', because that doesn't take into
             ## account the time to actually save the images, which is a lot for large images.
-            last_save[1] = time.clock()
+            last_save[1] = clock()
     
     Ylen = arr.shape[0]*arr.shape[1]*( len(colors) - 1 )
     
@@ -482,7 +487,7 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
             small_Y1 = optimize_smaller( solve_smaller_factor, small_arr, small_Y0, small_img_spatial_static_target )
             
             ## solve on the downsampled problem
-            print '==> Optimizing on a smaller image:', small_arr.shape, 'instead of', large_arr.shape
+            print( '==> Optimizing on a smaller image:', small_arr.shape, 'instead of', large_arr.shape )
             reset_saver( small_arr.shape )
             small_Y = optimize( small_arr, colors, small_Y1, weights, img_spatial_static_target = small_img_spatial_static_target, saver = saver )
             
@@ -512,10 +517,10 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
     img_diff=composite_img-arr_backup
     RMSE=sqrt(square(img_diff).sum()/(composite_img.shape[0]*composite_img.shape[1]))
     
-    print 'img_shape is: ', img_diff.shape
-    print 'max dist: ', sqrt(square(img_diff).sum(axis=2)).max()
-    print 'median dist', median(sqrt(square(img_diff).sum(axis=2)))
-    print 'RMSE: ', RMSE
+    print( 'img_shape is: ', img_diff.shape )
+    print( 'max dist: ', sqrt(square(img_diff).sum(axis=2)).max() )
+    print( 'median dist', median(sqrt(square(img_diff).sum(axis=2))) )
+    print( 'RMSE: ', RMSE )
 
 
     ##### save alphas as barycentric coordinates
@@ -539,9 +544,9 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
     temp=sum(origin_order_barycentric_weights.reshape((origin_order_barycentric_weights.shape[0],origin_order_barycentric_weights.shape[1],1))*colors_backup, axis=1)
     diff=temp-arr_backup.reshape((-1,3))
     # assert(abs(diff).max()<0.5)
-    print abs(diff).max()
-    print diff.shape[0]
-    print sqrt(square(diff).sum()/diff.shape[0])
+    print( abs(diff).max() )
+    print( diff.shape[0] )
+    print( sqrt(square(diff).sum()/diff.shape[0]) )
 
 
     origin_order_barycentric_weights=origin_order_barycentric_weights.reshape((arr.shape[0],arr.shape[1],-1))
@@ -550,7 +555,7 @@ def run_one( imgpath, orderpath, colorpath, outprefix, weightspath = None, save_
 
     import json
     output_all_weights_filename=outprefix+"-layer_optimization_all_weights.js"
-    with open(output_all_weights_filename,'wb') as myfile:
+    with open(output_all_weights_filename,'w') as myfile:
         json.dump({'weights': origin_order_barycentric_weights.tolist()}, myfile)
     
     for i in range(origin_order_barycentric_weights.shape[-1]):
@@ -604,22 +609,22 @@ def save_results( Y, colors, img_shape, outprefix ):
         layers.append( layer )
         outpath = outprefix + '-layer%02d.png' % li
         Image.fromarray( layer ).save( outpath )
-        print 'Saved layer:', outpath
+        print( 'Saved layer:', outpath )
     
     composited = composite_layers( layers )
     composited = composited.round().clip( 0, 255 ).astype( uint8 )
     outpath = outprefix + '-composite.png'
     Image.fromarray( composited ).save( outpath )
-    print 'Saved composite:', outpath
+    print( 'Saved composite:', outpath )
     return composited
 
 if __name__ == '__main__':
     import sys
     
     def usage():
-        print >> sys.stderr, "Usage:", sys.argv[0], "path/to/image path/to/layer_color_order path/to/layer_color_list.js path/to/output [--weights /path/to/weights.js] [--save-every save_every_N_seconds N] [--solve-smaller-factor F] [--too-small T]"
-        print >> sys.stderr, "NOTE: The 0-th element of layer_color_list is the background color."
-        print >> sys.stderr, 'NOTE: Files will be saved to "path/to/output-composite.png" and "path/to/output-layer01.png"'
+        print( "Usage:", sys.argv[0], "path/to/image path/to/layer_color_order path/to/layer_color_list.js path/to/output [--weights /path/to/weights.js] [--save-every save_every_N_seconds N] [--solve-smaller-factor F] [--too-small T]", file = sys.stderr )
+        print( "NOTE: The 0-th element of layer_color_list is the background color.", file = sys.stderr )
+        print( 'NOTE: Files will be saved to "path/to/output-composite.png" and "path/to/output-layer01.png"', file = sys.stderr )
         sys.exit(-1)
     
     args = list( sys.argv[1:] )
@@ -660,8 +665,7 @@ if __name__ == '__main__':
     if len( args ) != 4: usage()
     
     image_path, orderpath, color_path, output_prefix = args
-    import time
-    start=time.clock()
+    start=clock()
     run_one( image_path, orderpath, color_path, output_prefix, weightspath = weightspath, save_every = save_every, solve_smaller_factor = solve_smaller_factor, too_small = too_small )
-    end=time.clock()
-    print 'time: ', end-start
+    end=clock()
+    print( 'time: ', end-start )

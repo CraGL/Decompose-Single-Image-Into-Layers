@@ -37,8 +37,8 @@ def gen_symmetric_grid_laplacian2( rows, cols, cut_edges = None ):
     
     ## The middle (lacking the first and last columns) strip down
     ## to the bottom, not including the bottom row.
-    for i in xrange( 0, rows-1 ):
-        for j in xrange( 1, cols-1 ):
+    for i in range( 0, rows-1 ):
+        for j in range( 1, cols-1 ):
             
             ind00 = ij2ind( i,j )
             indp0 = ij2ind( i+1,j )
@@ -47,7 +47,7 @@ def gen_symmetric_grid_laplacian2( rows, cols, cut_edges = None ):
     
     ## The first and last columns down to the bottom,
     ## not including the bottom row.
-    for i in xrange( 0, rows-1 ):
+    for i in range( 0, rows-1 ):
         for j in ( 0, cols-1 ):
             
             ind00 = ij2ind( i,j )
@@ -57,8 +57,8 @@ def gen_symmetric_grid_laplacian2( rows, cols, cut_edges = None ):
     
     ## The middle (lacking the first and last rows) strip to
     ## the right, not including the last column.
-    for i in xrange( 1, rows-1 ):
-        for j in xrange( 0, cols-1 ):
+    for i in range( 1, rows-1 ):
+        for j in range( 0, cols-1 ):
             
             ind00 = ij2ind( i,j )
             ind0p = ij2ind( i,j+1 )
@@ -68,7 +68,7 @@ def gen_symmetric_grid_laplacian2( rows, cols, cut_edges = None ):
     ## The first and last rows over to the right,
     ## not including the right-most column.
     for i in ( 0, rows-1 ):
-        for j in xrange( 0, cols-1 ):
+        for j in range( 0, cols-1 ):
             
             ind00 = ij2ind( i,j )
             ind0p = ij2ind( i,j+1 )
@@ -111,7 +111,7 @@ def gen_symmetric_grid_laplacian2( rows, cols, cut_edges = None ):
     #Mass = sparse.lil_matrix( ( rows*cols, rows*cols ) )
     #Mass.setdiag( asarray(AdjMatrix.sum(1)).ravel() )
     #debugger()
-    Mass = sparse.coo_matrix( ( asarray(AdjMatrix.sum(1)).ravel(), ( range( rows*cols ), range( rows*cols ) ) ) )
+    Mass = sparse.coo_matrix( ( asarray(AdjMatrix.sum(1)).ravel(), ( arange( rows*cols ), arange( rows*cols ) ) ) )
     L = ( Mass - AdjMatrix )
     
     ## The rows should sum to 0.

@@ -45,12 +45,12 @@ if __name__=="__main__":
     shape=weights.shape
     num=shape[-1]
 
-    print order
+    print( order )
     alphas=covnert_from_barycentric_weights_to_alphas(weights.reshape((-1,num)),order)
-    print alphas.shape
-    print vertices
+    print( alphas.shape )
+    print( vertices )
     vertices=vertices[order,:]
-    print vertices
+    print( vertices )
     alphas=alphas.reshape(shape)
     layer=np.ones((shape[0],shape[1],4))
     for i in range(num):

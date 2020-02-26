@@ -1,6 +1,8 @@
 ##### copying from SILD_6b_Generating_transparent_layers_assuming_pixelchangeonly3times_using_optimization.ipynb. 
 ####  created at 2015.06.08
 
+from __future__ import print_function, division
+
 import numpy as np
 import os
 from scipy.spatial import ConvexHull
@@ -11,10 +13,12 @@ import pyximport
 pyximport.install(reload_support=True)
 from GteDistPointTriangle import *
 from pprint import pprint 
-import time
+try: from time import process_time as clock
+## Python 2 compatibility
+except ImportError: from time import clock
 
 
-start=time.clock()
+start=clock()
 
 def Get_ASAP_alphas(img_label,tetra_prime,weights):
 
@@ -291,10 +295,10 @@ if __name__ =='__main__':
 
 
     temp=255.0*np.sum(barycentric_weights.reshape((barycentric_weights.shape[0],barycentric_weights.shape[1],1))*tetra_prime, axis=1)
-    print temp.max()
+    print( temp.max() )
     diff=temp-img_label_backup.reshape((-1,3))
-    print abs(diff).max()
-    print sqrt(square(diff).sum()/diff.shape[0])
+    print( abs(diff).max() )
+    print( sqrt(square(diff).sum()/diff.shape[0]) )
 
     # barycentric_weights=barycentric_weights.reshape((img_shape[0],img_shape[1],-1))
     origin_order_barycentric_weights=np.ones(barycentric_weights.shape)
@@ -310,9 +314,9 @@ if __name__ =='__main__':
     ####assert
     temp=255.0*np.sum(origin_order_barycentric_weights.reshape((origin_order_barycentric_weights.shape[0],origin_order_barycentric_weights.shape[1],1))*tetra_prime_backup, axis=1)
     diff=temp-img_label_backup.reshape((-1,3))
-    print abs(diff).max()
-    print diff.shape[0]
-    print sqrt(square(diff).sum()/diff.shape[0])
+    print( abs(diff).max() )
+    print( diff.shape[0] )
+    print( sqrt(square(diff).sum()/diff.shape[0]) )
 
 
     origin_order_barycentric_weights=origin_order_barycentric_weights.reshape((img_shape[0],img_shape[1],-1))
@@ -320,7 +324,7 @@ if __name__ =='__main__':
 
     import json
     output_all_weights_filename=output_prefix+"-layer_all_weights.js"
-    with open(output_all_weights_filename,'wb') as myfile:
+    with open(output_all_weights_filename,'w') as myfile:
         json.dump({'weights': origin_order_barycentric_weights.tolist()}, myfile)
 
     for i in range(origin_order_barycentric_weights.shape[-1]):
@@ -337,26 +341,26 @@ if __name__ =='__main__':
         layers.append( layer )
         outpath = output_prefix + '-layer%02d.png' % li
         Image.fromarray( layer ).save( outpath )
-        print 'Saved layer:', outpath
+        print( 'Saved layer:', outpath )
 
     composited = composite_layers( layers )
     composited = composited.round().clip( 0, 255 ).astype( np.uint8 )
     outpath = output_prefix + '-composite.png'
     Image.fromarray( composited ).save( outpath )
-    print 'Saved composite:', outpath
+    print( 'Saved composite:', outpath )
 
 
     img_diff=composited-np.asfarray(images)
     RMSE=sqrt(sum(square(img_diff))/(composited.shape[0]*composited.shape[1]))
 
-    print 'img_shape is: ', img_diff.shape
-    print 'max dist: ', sqrt(square(img_diff).sum(axis=2)).max()
-    print 'median dist', median(sqrt(square(img_diff).sum(axis=2)))
-    print 'RMSE: ', RMSE
+    print( 'img_shape is: ', img_diff.shape )
+    print( 'max dist: ', sqrt(square(img_diff).sum(axis=2)).max() )
+    print( 'median dist', median(sqrt(square(img_diff).sum(axis=2))) )
+    print( 'RMSE: ', RMSE )
 
 
 
-    stop=time.clock()
+    stop=clock()
 
-    print 'time: ', stop-start
+    print( 'time: ', stop-start )
 
