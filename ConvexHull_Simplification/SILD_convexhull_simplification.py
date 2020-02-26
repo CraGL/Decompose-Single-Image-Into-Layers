@@ -1,6 +1,7 @@
 #####directly copy from SILD_convexhull_simplification-minimize_adding_volume_or_normalized_adding_volume.ipynb 2016.01.11
 #### and then remove many unrelated codes. 
 
+from __future__ import print_function
 
 import numpy as np
 from scipy.spatial import ConvexHull
@@ -111,7 +112,7 @@ def edge_normal_test(vertices, faces, old_face_index_list, v0_ind, v1_ind):
             
     assert( len(central_two_face_list)==2 )
     if len(central_two_face_list)+len(selected_old_face_list)!=len(old_face_index_list):
-        print 'error!!!!!!'
+        print( 'error!!!!!!' )
     
     central_two_face_normal_list=[]
     neighbor_face_dot_normal_list=[]
@@ -235,7 +236,7 @@ def remove_one_edge_by_finding_smallest_adding_volume_with_test_conditions(mesh,
 
     if option==1:
         if len(temp_list1)==0:
-            print 'all fails'
+            print( 'all fails' )
             hull=ConvexHull(mesh.vs)
         else:
             min_tuple=min(temp_list1,key=lambda x: x[1])
@@ -252,7 +253,7 @@ def remove_one_edge_by_finding_smallest_adding_volume_with_test_conditions(mesh,
     if option==2:
         
         if len(temp_list1)==0:
-            print 'all fails'
+            print( 'all fails' )
         else:
             min_tuple=min(temp_list1,key=lambda x: x[1])
             # print min_tuple
@@ -285,6 +286,7 @@ def remove_one_edge_by_finding_smallest_adding_volume_with_test_conditions(mesh,
             
 
             ##### do not clip coordinates to[0,255]. when simplification done, clip.
+            mesh.vs = list(mesh.vs)
             mesh.vs.append(final_point)
             
 
@@ -292,6 +294,7 @@ def remove_one_edge_by_finding_smallest_adding_volume_with_test_conditions(mesh,
             # mesh.vs.append(final_point.clip(0.0,255.0))
             
 
+            mesh.faces = list(mesh.faces)
             for face in new_faces_vertex_ind:
                 mesh.faces.append(face)
             mesh.topology_changed()
@@ -318,8 +321,12 @@ if __name__=="__main__":
     E_vertice_num=4
 
 
-    import time 
-    start_time=time.clock()
+    try:
+        from time import process_time as clock
+    ## Python 2 compatibility
+    except ImportError:
+        from time import clock
+    start_time=clock()
 
     images=np.asfarray(Image.open(input_image_path).convert('RGB')).reshape((-1,3))
     hull=ConvexHull(images)
@@ -332,7 +339,7 @@ if __name__=="__main__":
 
     N=500
     mesh=TriMesh.FromOBJ_FileName(output_rawhull_obj_file)
-    print 'original vertices number:',len(mesh.vs)
+    print( 'original vertices number:',len(mesh.vs) )
 
 
     for i in range(N):
@@ -363,7 +370,7 @@ if __name__=="__main__":
 
 
         if len(mesh.vs)==old_num or len(mesh.vs)<=E_vertice_num:
-            print 'final vertices number', len(mesh.vs)
+            print( 'final vertices number', len(mesh.vs) )
             break
 
             
@@ -384,9 +391,9 @@ if __name__=="__main__":
 
 
 
-    end_time=time.clock()
+    end_time=clock()
 
-    print 'time: ', end_time-start_time
+    print( 'time: ', end_time-start_time )
 
 
 
