@@ -68,9 +68,14 @@ The `apple.png` image is copyright [Adelle Chudleigh](http://gothicwolfcorpse.de
 The `moth.png` image is copyright [Michelle Lee](http://cargocollective.com/michellelee/Illustration).
 
 ## Dependencies
+
+Python 2 or 3
+
 * NumPy
 * SciPy
 * Cython
 * [GLPK](https://www.gnu.org/software/glpk/) (`brew install glpk`)
 * cvxopt, built with the [GLPK](https://www.gnu.org/software/glpk/) linear programming solver interface (`CVXOPT_BUILD_GLPK=1 pip install cvxopt`)
 * PIL or Pillow (Python Image Library) (`pip install Pillow`)
+
+Some people are reporting crashes with GLPK. The fix is to disable it. See [this GitHub issue](https://github.com/CraGL/Decompose-Single-Image-Into-Layers/issues/5).
