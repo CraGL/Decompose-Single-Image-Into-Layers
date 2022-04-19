@@ -1,5 +1,5 @@
 '''
-Ported from: http://www.geometrictools.com/GTEngine/Include/GteDistPointTriangle.h
+Ported from: https://www.geometrictools.com/GTE/Mathematics/DistPointTriangle.h
 '''
 from libc.math cimport sqrt
 
